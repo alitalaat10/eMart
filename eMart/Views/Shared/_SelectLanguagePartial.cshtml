@@ -1,0 +1,45 @@
+﻿
+@using Microsoft.AspNetCore.Builder
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.AspNetCore.Http.Features
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Options
+@inject IViewLocalizer localizer
+@inject IOptions<RequestLocalizationOptions> locOptions
+
+@{
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var cultureItems = locOptions.Value.SupportedCultures
+        .Select(c => new SelectListItem { Value = c.Name, Text = c.NativeName })
+        .ToList();
+    var returnUrl = string.IsNullOrEmpty(Context.Request.Path) ? "~/" : $"~{Context.Request.Path.Value}";
+}
+   
+<div title="@localizer["Request culture provider:"] @requestCulture?.Provider?.GetType().Name" class="language-selection">
+
+    <form id="selectLanguage" method="post" asp-controller="Language" asp-action="SetLanguage" asp-route-returnUrl="@returnUrl" asp-route-userId="@ViewBag.userId" asp-route-pgInHome="@ViewBag.pgInHome" asp-route-pgInSubCategory="@ViewBag.pgInSubCategory" , asp-route-pgInCategory="@ViewBag.pgInCategory" , asp-route-id="@ViewData["Id"]">
+                <select name="culture" class="form-select" onchange="this.form.submit();"
+                        asp-for="@requestCulture.RequestCulture.UICulture.Name"
+                        asp-items="cultureItems"></select>
+            </form>
+    
+</div>
+
+
+
+   
+
+<style>
+    .language-selection {
+        margin: 20px 0; /* Add spacing around the selection */
+        padding: 10px; /* Add some padding */
+        background-color: #f8f9fa; /* Light background for visibility */
+        border-radius: 5px; /* Rounded corners */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow */
+    }
+
+    .form-select {
+        width: 200px; /* Fixed width for better appearance */
+        border-radius: 5px; /* Rounded corners for select */
+    }
+</style>

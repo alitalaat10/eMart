@@ -1,0 +1,27 @@
+# Ignore node modules
+node_modules/
+
+# Ignore environment configuration files (add any secret config files you have)
+.env
+*.env
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore Visual Studio build files
+*.vs/
+*.sln
+
+package-lock.json
+package.json
+
+appsettings.json
+appsettings.Development.json
+
+ScaffoldingReadMe.txt
+
+# Ignore npm log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

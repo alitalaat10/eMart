@@ -1,0 +1,109 @@
+﻿@model eMart.DTO_Models.CategoryViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer localizer
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Pager pager = new Pager();
+    int pageNo = 0;
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+<link href="~/css/cards.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/css/stars.css" />
+<div class="container p-3">
+    <partial name="_notify" />
+
+    <h2>@localizer["Subcategories"]</h2>
+    <div class="row mb-4">
+       @if(Model.SubCategories.Any())
+       {
+          foreach (var m in Model.SubCategories)
+          {
+              <div class="col-md-4 mb-3">
+                  <div class="card h-100">
+                      <!-- Set h-100 for full height -->      
+                      <div class="card-img">
+                          <a asp-action="Index" asp-controller="SubCategory" asp-route-id="@m.Id">
+                              <img src="@m.ImgSrc" alt="@m.Name" />
+                          </a>
+                      </div>
+                        <div class="card-footer text-center">@m.Name</div>
+                  </div>
+              </div>
+          }
+       }
+    </div>
+
+    <hr />
+
+    <h2>@localizer["Products"]</h2>
+    <partial name="_categoryPager" model="@pager" />
+    <div class="row">
+        @if (Model.Products.Any())
+        {
+            foreach (var m in Model.Products)
+            {
+                
+                    
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100">
+                            <!-- Set h-100 for full height -->
+                            <a asp-action="Index" asp-controller="Product" asp-route-id="@m.Id">
+                               
+                                <div class="card-img">
+                                    <img src="@m.ImgSrc" alt="@m.Name" />
+                                </div>
+                            </a>
+                            <div class="card-footer text-center">
+                                 <a asp-action="Index" asp-controller="Product" asp-route-id="@m.Id">
+                            <div>@m.Name</div>
+                            </a>
+                            <div class="star-rating">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (i <= m.Rate)
+                                    {
+                                        <span class="star filled">★</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="star">★</span>
+                                    }
+                                }
+                            </div>
+                            <div>@m.price.ToString("c")</div>
+                                @if (m.Stock == 0)
+                                {
+                                    <div class="btn btn-warning disabled">@localizer["Out of Stock"]</div>
+                                }
+                                else
+                                {
+                                    <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@m.Id" asp-route-returnUrl="@string.Format("{0}", Context.Request.Path)" class="btn btn-success">
+                                        <i class="bi bi-plus-square"></i> @localizer["Add to Cart"]
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    
+            }
+        }
+        else
+        {
+            <div class="col-md-3 mb-3">
+                <div class="card h-100">
+                    <!-- Set h-100 for full height -->
+                    <div class="card-body text-center">
+                        <p>@localizer["No products available in this category."]</p>
+                    </div>
+                </div>
+            </div>
+        }
+        
+    </div>
+    <partial name="_categoryPager" model="@pager" />
+</div>

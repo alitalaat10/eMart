@@ -1,0 +1,33 @@
+﻿.star-rating {
+    direction: rtl;
+    display: inline-block;
+    font-size: 2em;
+    unicode-bidi: bidi-override;
+}
+
+    .star-rating input[type="radio"] {
+        display: none;
+    }
+
+    .star-rating label {
+        color: lightgray;
+        cursor: pointer;
+    }
+
+    .star-rating input[type="radio"]:checked ~ label {
+        color: gold;
+    }
+
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+        color: gold;
+    }
+.star {
+    font-size: 24px; /* Adjust the size of the stars */
+    color: #ddd; /* Unfilled star color */
+    cursor: pointer;
+}
+
+    .star.filled {
+        color: gold; /* Filled star color */
+    }

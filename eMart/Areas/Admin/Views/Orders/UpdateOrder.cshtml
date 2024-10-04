@@ -1,0 +1,74 @@
+﻿@using Microsoft.DotNet.Scaffolding.Shared.Messaging
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@model eMart.Models.Order
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer localizer
+
+@{
+    ViewData["Title"] = localizer["Title"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@localizer["Title"]</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="UpdateOrder">
+            <div asp-validation-summary="None" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" readonly class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TotalPrice" class="control-label"></label>
+                <input asp-for="TotalPrice" class="form-control" type="number" min="0" step="0.01" required />
+                <span asp-validation-for="TotalPrice" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="status" class="control-label"></label>
+                <select asp-for="status" asp-items="@ViewBag.selectlist" class="form-control" required></select>
+                <span asp-validation-for="status" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CreatedDate" class="control-label"></label>
+                <input asp-for="CreatedDate" readonly class="form-control" />
+                <span asp-validation-for="CreatedDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DeliveryDate" class="control-label"></label>
+                <input asp-for="DeliveryDate" class="form-control" type="date" required />
+                <span asp-validation-for="DeliveryDate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DeliveryLocation" class="control-label"></label>
+                <input asp-for="DeliveryLocation" readonly class="form-control" />
+                <span asp-validation-for="DeliveryLocation" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" hidden>
+                <label asp-for="UserId" class="control-label"></label>
+                <input asp-for="UserId" class="form-control" />
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+
+            <br />
+            <hr />
+
+            <div class="form-group">
+                <input type="submit" value="@localizer["Confirm"]" class="btn btn-primary" style="width: 150px;" />
+            </div>
+        </form>
+    </div>
+</div>
+<hr />
+<div>
+    <a asp-action="Index" class="btn btn-secondary">@localizer["Back"]</a>
+</div>

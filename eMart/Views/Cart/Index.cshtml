@@ -1,0 +1,103 @@
+﻿@model IEnumerable<CartProducts>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer localizer
+
+@{
+    ViewData["Title"] = localizer["Title"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container p-3">
+    <partial name="_notify" />
+
+    <div class="row pt-4">
+        <div class="col-6">
+            <h4 class="text-primary" style="color:red;">@localizer["Title"]</h4>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-hover table-striped align-middle">
+            @foreach (var m in Model)
+            {
+                <tr>
+                    <td scope="row" align="center">
+                        <a asp-action="Index" asp-controller="Product" asp-route-id="@m.Product.Id">@m.Product.Name</a>
+                    </td>
+                    <td>
+                        <a asp-action="Index" asp-controller="Product" asp-route-id="@m.Product.Id">
+                            <img src="@m.Product.ImgSrc" style="width:50px" class="img-thumbnail" alt="@m.Product.Name" />
+                        </a>
+                    </td>
+                    <td>
+                        <a asp-action="Index" asp-controller="Product" asp-route-id="@m.Product.Id">@m.Product.Description</a>
+                    </td>
+                    <td>
+                        @m.Price.ToString("C")  <!-- Format price as currency -->
+                    </td>
+                    <td>
+                        <a asp-action="AddToCart" asp-route-id="@m.Product.Id" asp-route-returnUrl="@string.Format("{0}{1}", Context.Request.Path, Context.Request.QueryString)" class="btn btn-success">
+                            <i class="bi bi-plus-square"></i>
+                        </a>
+                        <div>@m.Quantity</div>
+                        <a asp-action="RemoveQuantity" asp-route-id="@m.Product.Id" asp-route-returnUrl="@string.Format("{0}{1}", Context.Request.Path, Context.Request.QueryString)" class="btn btn-danger">
+                            <i class="bi bi-dash-square"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@m.Product.Id" class="btn btn-outline-danger delete-item">
+                            <i class="bi bi-trash-fill"></i> @localizer["Remove"]
+                        </a>
+                    </td>
+                </tr>
+            }
+        </table>
+
+        <div class="row pt-4">
+            <div class="col-6">
+                <h4 class="text-primary" style="color:red;">
+                    <a asp-action="Index" asp-controller="Order" id="order" class="btn btn-primary">@localizer["Order Now"]</a>
+                </h4>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning" role="alert">
+            @localizer["Your cart is empty."]
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.delete-item').forEach(item => {
+            item.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                });
+
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'No, cancel!',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = this.href;
+                    }
+                });
+            });
+        });
+    </script>
+}

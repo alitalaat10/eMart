@@ -1,0 +1,69 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@model IEnumerable<eMart.Models.AppUser>
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer localizer
+@{
+    ViewData["Title"] = localizer["Title"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">@localizer["System Users"]</h2>
+        </div>
+    </div>
+
+    <table id="tbllist" class="table table-hover table-striped align-middle">
+        <thead class="table-primary">
+            <tr>
+                <th hidden scope="col"></th>
+                <th scope="col">@localizer["User Name"]</th>
+                <th scope="col">@localizer["Actions"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td hidden>@user.Id</td>
+                    <td>@user.UserName</td>
+                    <td>
+                        <a asp-area="Admin" asp-controller="Roles" asp-action="AddRoles" asp-route-userId="@user.Id" class="btn btn-sm btn-success">
+                            <i class="bi bi-pencil-square"></i> @localizer["Edit Roles"]
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+        <script type="text/javascript">
+
+        // Select all <th> elements
+        let headers = document.querySelectorAll('th');
+
+        // Create an array to store the content of the headers
+        let headerContents = [];
+        headers.forEach(header => {
+            var column = { title: header.textContent.trim() }
+            headerContents.push(column);
+        });
+
+        var js = jQuery.noConflict(true);
+        js(document).ready(function () {
+            js('#tbllist').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                columns: headerContents
+            });
+        });
+    </script>
+</div>

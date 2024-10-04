@@ -1,0 +1,120 @@
+﻿@model IEnumerable<eMart.Models.Product>
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer localizer
+@{
+    ViewData["Title"] = localizer["Title"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container p-3">
+    <partial name="_notify" />
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary">@localizer["Title"]</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-action="InsertorEdit" class="btn btn-success">
+                <i class="bi bi-plus-square"></i> @localizer["AddItem"]
+            </a>
+        </div>
+    </div>
+
+    <table id="tbllist" class="table table-hover table-striped align-middle">
+        <thead class="table-primary">
+            <tr>
+                <th width="10%">@localizer["Name"]</th>
+                <th width="20%">@localizer["Description"]</th>
+                <th width="10%">@localizer["Brand"]</th>
+                <th width="10%">@localizer["Price"]</th>
+                <th width="10%">@localizer["Stock"]</th>
+                <th width="10%">@localizer["Image"]</th>
+                <th width="15%">@localizer["SubCategory"]</th>
+                <th width="15%">@localizer["Actions"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var m in Model)
+            {
+                <tr>
+                    <td>@m.Name</td>
+                    <td>@m.Description</td>
+                    <td>@m.brand.Name</td>
+                    <td>@m.price</td>
+                    <td>@m.Stock</td>
+                    <td>
+                        <img src="@m.ImgSrc" style="width:50px" class="img-thumbnail" alt="@m.Name" />
+                    </td>
+                    <td>@m.subcategory.Name</td>
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@m.Id" class="btn btn-danger delete-item">
+                            <i class="bi bi-trash-fill"></i> @localizer["Delete"]
+                        </a>
+                        <a asp-action="InsertorEdit" asp-route-id="@m.Id" class="btn btn-success">
+                            <i class="bi bi-pencil-square"></i> @localizer["Edit"]
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+      <script type="text/javascript">
+
+        // Select all <th> elements
+        let headers = document.querySelectorAll('th');
+
+        // Create an array to store the content of the headers
+        let headerContents = [];
+        headers.forEach(header => {
+            var column = { title: header.textContent.trim() }
+            headerContents.push(column);
+        });
+
+        var js = jQuery.noConflict(true);
+        js(document).ready(function () {
+            js('#tbllist').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                columns: headerContents
+            });
+        });
+    </script>
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.delete-item').forEach(item => {
+            item.addEventListener('click', function (event) {
+                event.preventDefault();
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn btn-success',
+                        cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                });
+
+                swalWithBootstrapButtons.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'No, cancel!',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = this.href;
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -1,0 +1,114 @@
+﻿@model productDto
+@using Microsoft.AspNetCore.Mvc.Localization
+@using eMart.DTO_Models
+@inject IViewLocalizer localizer
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container p-3">
+    <partial name="_notify" />
+
+    <div class="product">
+        <h1>@Model.product.Name</h1>
+        <img src="@Model.product.ImgSrc" width="350px" height="350px" alt="@Model.product.Name" />
+        <h2>@Model.product.Description</h2>
+        <h2>@Model.product.price.ToString("C")</h2>
+        <h2>@Model.product.brand.Name</h2>
+
+        @if (Model.product.Stock == 0)
+        {
+            <div class="btn btn-primary">@localizer["Out of Stock"]</div>
+        }
+        else
+        {
+            <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@Model.product.Id" asp-route-returnUrl="@string.Format("{0}{1}", Context.Request.Path, Context.Request.QueryString)" class="btn btn-success">
+                <i class="bi bi-plus-square">@localizer["Add to Cart"]</i>
+            </a>
+        }
+    </div>
+
+    <link rel="stylesheet" href="~/css/stars.css" />
+
+    <div class="reviews">
+        <h1>@localizer["Reviews"]</h1>
+
+        @foreach (var m in Model.reviews)
+        {
+            <div class="review">
+                <h4>@m.User.UserName</h4>
+                <div class="star-rating">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        if (i <= m.Rate)
+                        {
+                            <span class="star filled">★</span>
+                        }
+                        else
+                        {
+                            <span class="star">★</span>
+                        }
+                    }
+                </div>
+                <p>@m.Comment</p>
+            </div>
+        }
+
+        <ul id="reviewsList" class="review-list"></ul>
+    </div>
+
+    @if (Model.user != null)
+    {
+
+        <div>
+            <div class="form-group">
+                <input type="text" readonly id="Username" value="@Model.user.UserName" class="form-control" />
+                <input type="hidden" id="productId" value="@Model.product.Id" />
+            </div>
+
+            <div class="form-group">
+                <div class="star-rating">
+                    <input type="radio" id="star5" name="rating" value="5" required />
+                    <label for="star5">★</label>
+
+                    <input type="radio" id="star4" name="rating" value="4" required />
+                    <label for="star4">★</label>
+
+                    <input type="radio" id="star3" name="rating" value="3" required />
+                    <label for="star3">★</label>
+
+                    <input type="radio" id="star2" name="rating" value="2" required />
+                    <label for="star2">★</label>
+
+                    <input type="radio" id="star1" name="rating" value="1" required />
+                    <label for="star1">★</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Comment:</label>
+                <textarea id="Comment" placeholder="Your Review" class="form-control" required></textarea>
+            </div>
+
+            <br />
+            <hr />
+            <div class="form-group">
+                <button id="submitReview" class="btn btn-primary">Submit Review</button>
+            </div>
+        </div>
+        <script src="~/js/signalr/dist/browser/signalr.js"></script>
+        <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
+        <script src="~/js/user.js"></script>
+    }
+    else
+    {
+        <script src="~/js/signalr/dist/browser/signalr.js"></script>
+        <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
+        <script src="~/js/notuser.js"></script>
+
+    }
+
+   
+</div>
+
