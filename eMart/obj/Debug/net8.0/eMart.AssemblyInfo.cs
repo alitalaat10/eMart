@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("eMart")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e58d6456ef26a71db6e273e14a3cc444648acd87")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+365d84bc9552f26123758ed295e79841dec64945")]
 [assembly: System.Reflection.AssemblyProductAttribute("eMart")]
 [assembly: System.Reflection.AssemblyTitleAttribute("eMart")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

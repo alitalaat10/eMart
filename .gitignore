@@ -1,5 +1,7 @@
 # Ignore node modules
 node_modules/
+obj/
+bin/
 
 # Ignore environment configuration files (add any secret config files you have)
 .env
