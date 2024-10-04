@@ -1,7 +1,7 @@
 # Ignore node modules
 node_modules/
-obj/
-bin/
+eMart/bin/
+eMart/obj/
 
 # Ignore environment configuration files (add any secret config files you have)
 .env
