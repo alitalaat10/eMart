@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Localization;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 
@@ -6,6 +7,7 @@ namespace eMart.Controllers
 {
     
     [Route("[controller]")]
+    [AllowAnonymous]
     public class LanguageController : ControllerBase
     {
         private readonly IStringLocalizer<LanguageController> _localizer;

@@ -2,6 +2,7 @@
 node_modules/
 eMart/bin/
 eMart/obj/
+eMart/Services/
 
 # Ignore environment configuration files (add any secret config files you have)
 .env
@@ -14,6 +15,7 @@ Thumbs.db
 # Ignore Visual Studio build files
 *.vs/
 *.sln
+credentials.json
 
 package-lock.json
 package.json

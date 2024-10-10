@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using static System.Net.WebRequestMethods;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eMart.Controllers
 {
+    [Authorize(Roles = clsRoles.RoleUser + "," + clsRoles.RoleAdmin)]
     public class OrderController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -55,7 +57,7 @@ namespace eMart.Controllers
                 var cart = _unit.carts.selectone(x => x.UserId == user.Id);
                 var cartproducts = _unit.cartProducts.FindAll(nameof(CartProducts.Product)).Where(x => x.CartId == cart.Id);
 
-                var domain = "https://localhost:44313/";
+                var domain = "https://aliemart.runasp.net/";
 
                 var options = new SessionCreateOptions
                 {

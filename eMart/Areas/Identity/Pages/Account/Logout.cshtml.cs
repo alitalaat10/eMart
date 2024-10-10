@@ -24,7 +24,7 @@ namespace eMart.Areas.Identity.Pages.Account
             _logger = logger;
         }
 
-        public async Task<IActionResult> OnPost(string returnUrl = null)
+        public async Task<IActionResult> OnPost(string returnUrl)
         {
             HttpContext.Session.SetString("isAdmin", "False");
             HttpContext.Session.Remove("count");

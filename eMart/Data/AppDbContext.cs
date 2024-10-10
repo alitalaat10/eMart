@@ -31,7 +31,9 @@ namespace eMart.Data
         public DbSet<Review> Reviews  { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+        { 
+          
+
             modelBuilder.Entity<IdentityRole>().HasData(
                 new IdentityRole()
                 {
@@ -50,6 +52,9 @@ namespace eMart.Data
                 );
             base.OnModelCreating(modelBuilder);
         }
+
+    
+
 
 
     }

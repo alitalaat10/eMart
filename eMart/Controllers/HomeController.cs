@@ -2,6 +2,7 @@ using eMart.Data;
 using eMart.DTO_Models;
 using eMart.Models;
 using eMart.Repository.Base;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
@@ -12,6 +13,7 @@ using System.Diagnostics;
 
 namespace eMart.Controllers
 {
+    [AllowAnonymous]
     public class HomeController : Controller
     {
 

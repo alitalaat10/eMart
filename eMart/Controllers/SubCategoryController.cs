@@ -1,10 +1,12 @@
 ﻿using eMart.Models;
 using eMart.Repository.Base;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
 namespace eMart.Controllers
 {
+    [AllowAnonymous]
     public class SubCategoryController : Controller
     {
         private readonly ILogger<HomeController> _logger;

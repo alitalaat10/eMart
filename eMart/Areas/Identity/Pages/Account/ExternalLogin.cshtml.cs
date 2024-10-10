@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using eMart.Repository.Base;
+using Microsoft.IdentityModel.Tokens;
 
 namespace eMart.Areas.Identity.Pages.Account
 {
@@ -131,7 +132,41 @@ namespace eMart.Areas.Identity.Pages.Account
                         _unit.carts.Addone(c);
 
                     }
+                    var cart = _unit.carts.selectone(x => x.UserId == userId);
+                    if (cart != null)
+                    {
+                        var cartproducts = _unit.cartProducts.FindAll().Where(x => x.CartId == cart.Id);
+
+                        if (cartproducts.IsNullOrEmpty())
+                        {
+                            HttpContext.Session.SetInt32("count", 0);
+                            ViewData["Count"] = 0;
+
+                        }
+
+                        else
+                        {
+                            int count = 0;
+                            foreach (var product in cartproducts)
+                            {
+
+                                count += product.Quantity;
+                            }
+                            HttpContext.Session.SetInt32("count", count);
+                            ViewData["Count"] = count;
+
+                        }
+                    }
                 }
+
+
+                var user = await _userManager.FindByIdAsync(userId);
+                var userRoles = await _userManager.GetRolesAsync(user);
+                var isAdmin = userRoles.Any(x => x == "Admin");
+                var isAdminStr = isAdmin.ToString();
+                HttpContext.Session.SetString("isAdmin", isAdminStr);
+                ViewData["isAdmin"] = HttpContext.Session.GetString("isAdmin");
+
                 _logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
                 return LocalRedirect(returnUrl);
             }
@@ -169,6 +204,7 @@ namespace eMart.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+                user.EmailConfirmed = true;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -185,20 +221,20 @@ namespace eMart.Areas.Identity.Pages.Account
                         var userId = await _userManager.GetUserIdAsync(user);
                         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                        var callbackUrl = Url.Page(
-                            "/Account/ConfirmEmail",
-                            pageHandler: null,
-                            values: new { area = "Identity", userId = userId, code = code },
-                            protocol: Request.Scheme);
+                        //var callbackUrl = Url.Page(
+                        //    "/Account/ConfirmEmail",
+                        //    pageHandler: null,
+                        //    values: new { area = "Identity", userId = userId, code = code },
+                        //    protocol: Request.Scheme);
 
-                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                        //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                        //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                        // If account confirmation is required, we need to show the link if we don't have a real email sender
-                        if (_userManager.Options.SignIn.RequireConfirmedAccount)
-                        {
-                            return RedirectToPage("./RegisterConfirmation", new { Email = Input.Email });
-                        }
+                        //// If account confirmation is required, we need to show the link if we don't have a real email sender
+                        //if (_userManager.Options.SignIn.RequireConfirmedAccount)
+                        //{
+                        //    return RedirectToPage("./RegisterConfirmation", new { Email = Input.Email });
+                        //}
 
                         await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);
                         return LocalRedirect(returnUrl);

@@ -1,5 +1,6 @@
 ﻿using eMart.Models;
 using eMart.Repository.Base;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -9,7 +10,7 @@ using System.Security.Claims;
 
 namespace eMart.Controllers
 {
-
+    [Authorize(Roles = clsRoles.RoleUser+","+clsRoles.RoleAdmin)]
     public class CartController : Controller
     {
 

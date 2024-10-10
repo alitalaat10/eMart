@@ -1,12 +1,14 @@
 ﻿using eMart.DTO_Models;
 using eMart.Models;
 using eMart.Repository.Base;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
 
 namespace eMart.Controllers
 {
+    [AllowAnonymous]
     public class CategoryController : Controller
     {
         private readonly ILogger<HomeController> _logger;

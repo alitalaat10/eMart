@@ -1,6 +1,7 @@
 ﻿using eMart.DTO_Models;
 using eMart.Models;
 using eMart.Repository.Base;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -9,6 +10,7 @@ using Newtonsoft.Json;
 
 namespace eMart.Controllers
 {
+    [AllowAnonymous]
     public class ProductController : Controller
     {
         private readonly ILogger<HomeController> _logger;

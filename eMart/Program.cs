@@ -48,6 +48,10 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
 builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
 .AddRoles<IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
 
+
+
+
+
 builder.Services.AddAuthentication()
     .AddGoogle(options =>
     {
@@ -67,8 +71,9 @@ builder.Services.AddAuthentication()
         facebookOptions.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
 
     });
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
-builder.Services.AddTransient<IEmailSender, clsEmailConfirm>();
+builder.Services.AddTransient<IEmailSender, MailingService>();
 
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
@@ -77,6 +82,7 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options => options.IdleTimeout = TimeSpan.FromHours(10));
 
 var app = builder.Build();
+await SeedUsers(app.Services);
 
 app.UseSession();
 
@@ -117,3 +123,27 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+async Task SeedUsers(IServiceProvider services)
+{
+    using var scope = services.CreateScope();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+
+    if (await userManager.FindByEmailAsync(builder.Configuration["Admin:Email"]) == null)
+    {
+        var user = new AppUser
+        {
+            UserName = builder.Configuration["Admin:UserName"],
+            Email = builder.Configuration["Admin:Email"],
+            EmailConfirmed = true,
+        };
+
+        // Create the user with a password
+        var result = await userManager.CreateAsync(user, builder.Configuration["Admin:Password"]);
+
+        if (result.Succeeded)
+        {
+            // Optionally assign roles
+           await userManager.AddToRoleAsync(user,clsRoles.RoleAdmin);
+        }
+    }
+}
