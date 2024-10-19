@@ -82,6 +82,7 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options => options.IdleTimeout = TimeSpan.FromHours(10));
 
 var app = builder.Build();
+
 await SeedUsers(app.Services);
 
 app.UseSession();

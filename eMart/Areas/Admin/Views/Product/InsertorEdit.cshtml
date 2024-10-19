@@ -55,7 +55,7 @@
 
             <div class="form-group">
                 <label asp-for="ClientFile" class="control-label"></label>
-                <input type="file" asp-for="ClientFile" onchange="loadfile(event)" aria-label="Upload Image" />
+                <input type="file" asp-for="ClientFile" onchange="loadfile(event)" />
                 <img id="myimg" height="200" style="display:none;" />
                 @if (Model != null && !string.IsNullOrEmpty(Model.ImgSrc))
                 {

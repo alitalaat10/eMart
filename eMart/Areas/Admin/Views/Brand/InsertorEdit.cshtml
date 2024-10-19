@@ -19,12 +19,12 @@
 
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" required aria-label="@localizer["Name"]" />
+                <input asp-for="Name" class="form-control" required/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="ClientFile" class="control-label">@localizer["Upload Image"]</label>
+                <label asp-for="ClientFile" class="control-label"></label>
                 <input type="file" asp-for="ClientFile" accept="image/*" onchange="loadfile(event)" />
                 <img id="myimg" height="200" alt="@localizer["Image Preview"]" style="display: none;" />
                 @if (Model?.ImgSrc != null)

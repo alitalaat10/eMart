@@ -2,7 +2,6 @@
 node_modules/
 eMart/bin/
 eMart/obj/
-eMart/Services/
 eMart/Properties/PublishProfiles/
 
 # Ignore environment configuration files (add any secret config files you have)

@@ -31,6 +31,7 @@ namespace eMart.Controllers
         public async Task<IActionResult> Index(int pg =1)
         {
             HttpContext.Session.SetString("isAdmin", "False");
+            
             HttpContext.Session.Remove("count");
 
             var userId = _user.GetUserId(HttpContext.User);
