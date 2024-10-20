@@ -12,7 +12,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.8" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">

@@ -21,7 +21,13 @@
 <data name="Add to Cart" xml:space="preserve">
     <value>añadir a la cesta</value>
   </data>
-
-
-
+<data name="Reviews" xml:space="preserve">
+    <value>Reseñas</value>
+  </data>
+<data name="Submit Reviews" xml:space="preserve">
+    <value>Enviar reseña</value>
+  </data>
+<data name="Comment" xml:space="preserve">
+    <value>Comentario</value>
+  </data>
 </root>

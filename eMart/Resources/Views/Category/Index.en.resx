@@ -22,6 +22,14 @@
     <value>Add to Cart</value>
   </data>
 
+<data name="Subcategories" xml:space="preserve">
+    <value>Sub Categories</value>
+  </data>
+
+<data name="Products" xml:space="preserve">
+    <value>Products</value>
+  </data>
+
 
 
 </root>

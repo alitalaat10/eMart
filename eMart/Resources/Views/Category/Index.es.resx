@@ -21,6 +21,13 @@
 <data name="Add to Cart" xml:space="preserve">
     <value>añadir a la cesta</value>
   </data>
+<data name="Subcategories" xml:space="preserve">
+    <value>Subcategorías</value>
+  </data>
+
+<data name="Products" xml:space="preserve">
+    <value>Productos</value>
+  </data>
 
 
 

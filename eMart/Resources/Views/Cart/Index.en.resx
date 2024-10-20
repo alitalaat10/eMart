@@ -24,6 +24,9 @@
 <data name="Order Now" xml:space="preserve">
     <value>Order Now</value>
   </data>
+<data name="Your cart is empty." xml:space="preserve">
+    <value>Your cart is empty.</value>
+  </data>
 
 
 </root>

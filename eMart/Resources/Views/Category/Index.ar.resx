@@ -22,6 +22,14 @@
     <value>اضف للعربة</value>
   </data>
 
+<data name="Subcategories" xml:space="preserve">
+    <value>الفئات المندرجة</value>
+  </data>
+
+<data name="Products" xml:space="preserve">
+    <value>المنتجات</value>
+  </data>
+
 
 
 </root>

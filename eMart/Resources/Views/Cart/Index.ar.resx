@@ -25,5 +25,9 @@
     <value>اطلب الان</value>
   </data>
 
+<data name="Your cart is empty." xml:space="preserve">
+    <value>.عربة التسوق فارغة</value>
+  </data>
+
 
 </root>

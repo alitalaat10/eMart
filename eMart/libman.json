@@ -15,10 +15,6 @@
       "destination": "wwwroot/lib/qrcodejs/"
     },
     {
-      "library": "datatables@1.10.21",
-      "destination": "wwwroot/lib/datatables/"
-    },
-    {
       "provider": "unpkg",
       "library": "@microsoft/signalr@8.0.7",
       "destination": "wwwroot/js/signalr/",

@@ -24,6 +24,17 @@
     <value>Add to Cart</value>
   </data>
 
-
+<data name="Categories" xml:space="preserve">
+    <value>Categories</value>
+  </data>
+<data name="Products" xml:space="preserve">
+    <value>Products</value>
+  </data>
+<data name="No categories available." xml:space="preserve">
+    <value>No categories available.</value>
+  </data>
+<data name="No products available." xml:space="preserve">
+    <value>No products available.</value>
+  </data>
 
 </root>

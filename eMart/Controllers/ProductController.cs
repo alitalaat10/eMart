@@ -51,22 +51,6 @@ namespace eMart.Controllers
 
             return View(productDto);
         }
-        [HttpPost]
-        public async Task<IActionResult> AddReview([FromBody]ReviewModel Rev)
-         {
 
-            Review review = new Review();
-            var user = await _user.GetUserAsync(HttpContext.User);
-
-            review.Comment = Rev.Comment;
-            review.Rate = Rev.Rating;
-            review.UserId = user.Id;
-            review.ProductId = Rev.ProductId;
-
-            _unitOfWork.reviews.Addone(review);
-
-
-            return RedirectToAction(nameof(Index), new { id = Rev.ProductId });
-        }
     }
 }

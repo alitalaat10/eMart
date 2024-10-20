@@ -24,7 +24,17 @@
 <data name="Add to Cart" xml:space="preserve">
     <value>اضف للعربة</value>
   </data>
-
-
+<data name="Categories" xml:space="preserve">
+    <value>الفئات</value>
+  </data>
+<data name="Products" xml:space="preserve">
+    <value>المنتجات</value>
+  </data>
+<data name="No categories available." xml:space="preserve">
+    <value>لا يوجد فئات متوفرة</value>
+  </data>
+<data name="No products available." xml:space="preserve">
+    <value>لا يوجد منتجات متوفرة</value>
+  </data>
 
 </root>
