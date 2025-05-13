@@ -14,6 +14,7 @@
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                 <input type="hidden" name="Id" id="Id" value="@ViewData["Id"]"/>
+                <input type="hidden" name="searchTerm" id="searchTerm" value="@ViewData["searchTerm"]" />
                 <div class="form-floating mb-3">
                     <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" aria-label="Email" placeholder="name@example.com" />
                     <label asp-for="Input.Email" class="form-label">Email</label>

@@ -1,10 +1,12 @@
-﻿using eMart.Models;
+﻿using eMart.DTO_Models;
+using eMart.Models;
 using eMart.Repository.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using System;
 using System.Security.Claims;
 
 
@@ -32,7 +34,45 @@ namespace eMart.Controllers
             {
                 ViewBag.isAdmin = HttpContext.Session.GetString("isAdmin");
                 var cart = _unit.carts.selectone(x => x.UserId == userId);
+                var cartproducts = _unit.cartProducts.FindAll(nameof(CartProducts.Product)).Where(x => x.CartId == cart.Id);
 
+
+                if (cartproducts != null)
+                {
+                    int count = 0;
+                    foreach (var product in cartproducts)
+                    {
+
+                        count += product.Quantity;
+                    }
+                    HttpContext.Session.SetInt32("count", count);
+
+
+                    foreach (var cp in cartproducts)
+                    {
+                        var product = _unit.products.Find(cp.ProductId);
+                        if (cp.Quantity > product.Stock)
+                        {
+                            if (product.Stock == 0)
+                            {
+                                var C = HttpContext.Session.GetInt32("count") ?? 0;
+                                HttpContext.Session.SetInt32("count", C - cp.Quantity);
+                                _unit.cartProducts.DeleteOne(cp);
+                            }
+                            else
+                            {
+
+                                var C = HttpContext.Session.GetInt32("count") ?? 0;
+                                HttpContext.Session.SetInt32("count", C - (cp.Quantity - product.Stock));
+                                cp.Quantity = product.Stock;
+                                cp.Price = product.price * cp.Quantity;
+                                _unit.cartProducts.UpdateOne(cp);
+
+                            }
+                        }
+                    }
+                }
+            
 
                 if (HttpContext.Session.GetInt32("count") == 0)
                 {
@@ -42,9 +82,9 @@ namespace eMart.Controllers
 
                 else
                 {
-                    var cartproducts = _unit.cartProducts.FindAll(nameof(CartProducts.Product)).Where(x => x.CartId == cart.Id);
+                    var cartprods = _unit.cartProducts.FindAll(nameof(CartProducts.Product)).Where(x => x.CartId == cart.Id);
                     ViewData["Count"] = HttpContext.Session.GetInt32("count");
-                    return View(cartproducts);
+                    return View(cartprods);
                 }
             }
            
@@ -54,7 +94,7 @@ namespace eMart.Controllers
      
 
         }
-        public IActionResult AddToCart(int id, string returnUrl)
+        public IActionResult AddToCart(int id, int? homepg, int? catpg, int? subcatpg,int? searchpg,string returnUrl ,string? searchTerm)
         {
             var userId = _user.GetUserId(HttpContext.User);
             var ismatched = _user.Users.Any(x => x.Id == userId);
@@ -105,12 +145,37 @@ namespace eMart.Controllers
                 {
                     TempData["maxQuantity"] = $"the seller has {product.Stock} pieces of this product";
                 }
+                if (searchTerm != null)
+                {
+                    return RedirectToAction("Result", "Search", new { searchTerm ,pg=searchpg });
+                }
+                if (homepg != null)
+                {
+                    return RedirectToAction("Index", "Home", new { pg = homepg });
+                }
+                if (catpg != null)
+                {
+                    string[] segments = returnUrl.Split('/', StringSplitOptions.RemoveEmptyEntries);
+                    string catid = segments.Last(); 
+                    return RedirectToAction("Index", "Category", new { id=catid,pg = catpg });
+                }
+                if (subcatpg != null)
+                {
+                  
+                    string[] segments = returnUrl.Split('/', StringSplitOptions.RemoveEmptyEntries);
+                    string subid = segments.Last(); 
 
-                return LocalRedirect(returnUrl);
+                    return RedirectToAction("Index", "SubCategory", new {id=subid, pg = subcatpg });
+                }
+               
+
+                return LocalRedirect(returnUrl); 
 
             }
             else
             {
+          
+                TempData["searchTerm"] = searchTerm;
                 TempData["Id"] = id;
                 return RedirectToPage("/Account/Login", new { area = "Identity" , returnUrl});
             }

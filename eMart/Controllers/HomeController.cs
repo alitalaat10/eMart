@@ -87,7 +87,9 @@ namespace eMart.Controllers
                
             
             }
-             
+            ViewBag.Brands = _unitOfWork.brands.FindAll().Select(b => b.Name);
+            ViewBag.Categories = _unitOfWork.subCategories.FindAll().Select(c => c.Name);   
+
 
             const int pageSize = 10;
             if (pg < 1)

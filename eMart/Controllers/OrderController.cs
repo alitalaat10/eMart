@@ -30,6 +30,7 @@ namespace eMart.Controllers
            
            var cart = _unit.carts.selectone(x => x.UserId == user.Id);
                 var cartproducts = _unit.cartProducts.FindAll(nameof(CartProducts.Product)).Where(x => x.CartId == cart.Id);
+            
             foreach (var product in cartproducts)
             {
                 details.cartProducts.Add(product);
@@ -135,6 +136,7 @@ namespace eMart.Controllers
                     _unit.products.UpdateOne(product);
                    
                 }
+
 
                 _unit.cartProducts.DeleteMany(cartproducts);
                 

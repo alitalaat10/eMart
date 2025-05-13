@@ -20,7 +20,7 @@ namespace eMart.Controllers
 
 
         [HttpPost]
-        public IActionResult SetLanguage(string culture, string returnUrl,string userId,int? pgInHome, int? pgInSubCategory, int? pgInCategory, int id)
+        public IActionResult SetLanguage(string culture, string returnUrl,string? userId,int? pgInHome, int? pgInSubCategory, int? pgInCategory,int? pgInResult , string? searchTerm ,int id)
         {
             Response.Cookies.Append(
             CookieRequestCultureProvider.DefaultCookieName,
@@ -43,8 +43,11 @@ namespace eMart.Controllers
             {
                 return RedirectToAction("Index", "SubCategory", new { id, pg = pgInSubCategory });
             }
-           
-            
+            if (pgInResult != null)
+            {
+                return RedirectToAction("Result", "Search", new {searchTerm ,pg = pgInResult });
+            }
+
             return LocalRedirect(returnUrl);
         }
 

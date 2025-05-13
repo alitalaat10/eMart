@@ -15,31 +15,28 @@
     var returnUrl = string.IsNullOrEmpty(Context.Request.Path) ? "~/" : $"~{Context.Request.Path.Value}";
 }
    
-<div title="@localizer["Request culture provider:"] @requestCulture?.Provider?.GetType().Name" class="language-selection">
 
-    <form id="selectLanguage" method="post" asp-controller="Language" asp-action="SetLanguage" asp-route-returnUrl="@returnUrl" asp-route-userId="@ViewBag.userId" asp-route-pgInHome="@ViewBag.pgInHome" asp-route-pgInSubCategory="@ViewBag.pgInSubCategory" , asp-route-pgInCategory="@ViewBag.pgInCategory" , asp-route-id="@ViewData["Id"]">
-                <select name="culture" class="form-select" onchange="this.form.submit();"
-                        asp-for="@requestCulture.RequestCulture.UICulture.Name"
-                        asp-items="cultureItems"></select>
+
+
+<div class="dropdown">
+    <button class="btn btn-sm btn-light dropdown-toggle" type="button" id="languageDropdown"
+            data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-globe me-1"></i>@localizer["Language"]
+    </button>
+    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+        @foreach (var culture in cultureItems)
+        {
+            <form method="post" asp-controller="Language" asp-action="SetLanguage"
+                  asp-route-returnUrl="@returnUrl" asp-route-userId="@ViewBag.userId"
+                  asp-route-pgInHome="@ViewBag.pgInHome" asp-route-pgInSubCategory="@ViewBag.pgInSubCategory"
+                  asp-route-pgInCategory="@ViewBag.pgInCategory" asp-route-pgInResult="@ViewBag.pgInResult"
+                  asp-route-searchTerm="@ViewData["searchTerm"]" asp-route-id="@ViewData["Id"]">
+                <input type="hidden" name="culture" value="@culture.Value" />
+                <button type="submit" class="dropdown-item @(culture.Value == requestCulture.RequestCulture.UICulture.Name ? "active" : "")">
+                    @culture.Text
+                </button>
             </form>
-    
+        }
+    </div>
 </div>
 
-
-
-   
-
-<style>
-    .language-selection {
-        margin: 20px 0; /* Add spacing around the selection */
-        padding: 10px; /* Add some padding */
-        background-color: #f8f9fa; /* Light background for visibility */
-        border-radius: 5px; /* Rounded corners */
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow */
-    }
-
-    .form-select {
-        width: 200px; /* Fixed width for better appearance */
-        border-radius: 5px; /* Rounded corners for select */
-    }
-</style>

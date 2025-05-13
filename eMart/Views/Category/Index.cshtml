@@ -82,7 +82,7 @@
                                 }
                                 else
                                 {
-                                    <a asp-action="AddToCart" asp-controller="Cart" asp-route-id="@m.Id" asp-route-returnUrl="@string.Format("{0}", Context.Request.Path)" class="btn btn-success">
+                                    <a asp-action="AddToCart" asp-controller="Cart" asp-route-catpg="@pageNo" asp-route-id="@m.Id" asp-route-returnUrl="@string.Format("{0}", Context.Request.Path)" class="btn btn-success">
                                         <i class="bi bi-plus-square"></i> @localizer["Add to Cart"]
                                     </a>
                                 }

@@ -1,4 +1,5 @@
 ﻿using eMart.Data;
+using eMart.Models;
 using eMart.Repository.Base;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -56,6 +57,8 @@ namespace eMart.Repository
             }
             return query.ToList();
         }
+
+
 
         public async Task<IEnumerable<T>> FindAllAsync(params string[] eagers)
         {

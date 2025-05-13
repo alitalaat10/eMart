@@ -1,4 +1,6 @@
-﻿namespace eMart.Repository.Base
+﻿using eMart.Models;
+
+namespace eMart.Repository.Base
 {
     public interface IRepository<T> where T :class 
     {
@@ -9,6 +11,7 @@
         public T selectLast(Func<T, bool> predicate);
         public IEnumerable<T> FindAll(params string[] eagers);
 
+      
         public Task<T> FindAsync(int id);
 
         public Task<IEnumerable<T>> FindAllAsync();

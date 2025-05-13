@@ -46,7 +46,7 @@ namespace eMart.Controllers
             }
 
             ViewData["Id"] = id;
-            const int pageSize =10;
+            const int pageSize = 10;
             if (pg < 1)
             {
                 pg = 1;

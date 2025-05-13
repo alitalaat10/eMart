@@ -18,6 +18,7 @@ using Microsoft.Extensions.Logging;
 using eMart.Repository.Base;
 using eMart.Repository;
 using Microsoft.IdentityModel.Tokens;
+using eMart.DTO_Models;
 
 namespace eMart.Areas.Identity.Pages.Account
 {
@@ -102,6 +103,11 @@ namespace eMart.Areas.Identity.Pages.Account
             {
                 ViewData["Id"] = TempData["Id"];    
             }
+            if (TempData["searchTerm"] != null)
+            {
+                ViewData["searchTerm"] = TempData["searchTerm"];
+            }
+          
             returnUrl ??= Url.Content("~/");
 
             // Clear the existing external cookie to ensure a clean login process
@@ -112,7 +118,7 @@ namespace eMart.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl, int? Id)
+        public async Task<IActionResult> OnPostAsync(string returnUrl, int? Id, string searchTerm)
         {
             returnUrl ??= Url.Content("~/");
 
@@ -142,7 +148,7 @@ namespace eMart.Areas.Identity.Pages.Account
                         var cart = _unit.carts.selectone(x => x.UserId == userId);
                         if (cart != null)
                         {
-                            var cartproducts = _unit.cartProducts.FindAll().Where(x => x.CartId == cart.Id);
+                            var cartproducts = _unit.cartProducts.FindAll(nameof(CartProducts.Product)).Where(x => x.CartId == cart.Id);
 
                             if (cartproducts.IsNullOrEmpty())
                             {
@@ -160,7 +166,35 @@ namespace eMart.Areas.Identity.Pages.Account
                                     count += product.Quantity;
                                 }
                                 HttpContext.Session.SetInt32("count", count);
-                                ViewData["Count"] = count;
+                              
+                                
+                                    foreach (var cp in cartproducts)
+                                    {
+                                        var product = _unit.products.Find(cp.ProductId);
+                                        if (cp.Quantity > product.Stock)
+                                        {
+                                            if (product.Stock == 0)
+                                            {
+                                                var C = HttpContext.Session.GetInt32("count") ?? 0;
+                                                HttpContext.Session.SetInt32("count", C - cp.Quantity);
+                                                _unit.cartProducts.DeleteOne(cp);
+                                            }
+                                            else
+                                            {
+
+                                                var C = HttpContext.Session.GetInt32("count") ?? 0;
+                                                HttpContext.Session.SetInt32("count", C - (cp.Quantity - product.Stock));
+                                                cp.Quantity = product.Stock;
+                                                cp.Price = product.price * cp.Quantity;
+                                                _unit.cartProducts.UpdateOne(cp);
+
+                                            }
+                                        }
+
+                                    }
+                                
+                                var cartprods = _unit.cartProducts.FindAll(nameof(CartProducts.Product)).Where(x => x.CartId == cart.Id);
+                                ViewData["Count"] = HttpContext.Session.GetInt32("count");
 
                             }
                         }
@@ -178,10 +212,15 @@ namespace eMart.Areas.Identity.Pages.Account
                         
                     
                     _logger.LogInformation("User logged in.");
+                 
                     if (Id != null)
-                    {
+                    { if (searchTerm != null)
+                        {
+                            return RedirectToAction("AddToCart", "Cart", new { area = "",searchTerm, id = Id, returnUrl });
+                        }
                        return RedirectToAction("AddToCart", "Cart", new {area="",id=Id,returnUrl });
                     }
+
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

@@ -13,10 +13,6 @@
 
     @if (CultureInfo.CurrentCulture.Name.StartsWith("ar"))
     {
-        <link rel="stylesheet"
-              href="https://cdn.rtlcss.com/bootstrap/v4.5.3/css/bootstrap.min.css"
-              integrity="sha384-JvExCACAZcHNJEc7156QaHXTnQL3hQBixvj5RV5buE7vgnNEzzskDtx9NQ4p6BJe"
-              crossorigin="anonymous" />
         <style>
             * {
                 direction: rtl;
@@ -35,47 +31,67 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom box-shadow mb-3">
-            <div class="container-fluid d-flex justify-content-between">
-                <!-- Logo and Left-side Links -->
-                <div class="d-flex align-items-center">
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">eMart</a>
-                    <ul class="navbar-nav ml-3">
-                        <!-- Adjusted margin for space -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm mb-3">
+            <div class="container-fluid">
+                <!-- Brand -->
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">eMart</a>
+
+                <!-- Toggler for mobile view -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
+                        aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Collapsible navbar content -->
+                <div class="collapse navbar-collapse" id="navbarMain">
+                    <!-- Left menu items -->
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">@localizer["Home"]</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">@localizer["Home"]</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">@localizer["Privacy"]</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">@localizer["Privacy"]</a>
                         </li>
                         @if (ViewBag.isAdmin == "True" || ViewData["isAdmin"]?.ToString() == "True")
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Admin" asp-controller="Home" asp-action="Index">@localizer["Admin Panel"]</a>
+                                <a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Index">@localizer["Admin Panel"]</a>
                             </li>
                         }
                     </ul>
-                </div>
 
-                <!-- Right-side Links -->
-                <div class="d-flex align-items-center">
-                    @if (ViewData["Count"] != null)
-                    {
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">
-                            <i class="bi bi-cart4"> (@ViewData["Count"])</i>
-                        </a>
-                    }
+                    <!-- Search form - Moderately wide design -->
+                    <form class="d-flex my-2 my-lg-0 col-12 col-md-4 mx-auto" asp-area="" asp-controller="Search" asp-action="Result">
+                        <div class="input-group">
+                            <input type="search" name="searchTerm" class="form-control" placeholder="Search products..." aria-label="Search">
+                            <button class="btn btn-warning arbtn" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
 
-                    <div class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            @localizer["Language"]
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><partial name="_SelectLanguagePartial" /></li>
-                        </ul>
-                    </div>
+                    <!-- Right side items -->
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                        <!-- Cart icon -->
+                        @if (ViewData["Count"] != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Cart" asp-action="Index">
+                                    <i class="bi bi-cart4"></i> <span class="badge bg-warning text-dark">@ViewData["Count"]</span>
+                                </a>
+                            </li>
+                        }
 
-                    <partial name="_LoginPartial" />
+                        <!-- Language selector -->
+                        <li class="nav-item">
+                            <partial name="_SelectLanguagePartial" />
+                        </li>
+
+                        <!-- Login/user info -->
+                        <li class="nav-item">
+                            <partial name="_LoginPartial" />
+                        </li>
+                    </ul>
                 </div>
             </div>
         </nav>
