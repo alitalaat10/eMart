@@ -32,10 +32,11 @@ namespace eMart.Controllers
             ViewData["Title"] = category.Name;
             var categorysubCategories = _unitOfWork.subCategories.FindAll().Where(x => x.CategoryId == id);
    
-            var products = _unitOfWork.products.FindAll(nameof(Product.Reviews)).Where(x => categorysubCategories.Any(c => c.Id == x.SubCategoryId));
-           
+            var products = _unitOfWork.products.FindAll(nameof(Product.Reviews),nameof(Product.brand)).Where(x => categorysubCategories.Any(c => c.Id == x.SubCategoryId));
+            List<Brand> brands = new List<Brand>();
             foreach (var product in products)
             {
+                brands.Add(product.brand);
                 if (!product.Reviews.IsNullOrEmpty())
                 {
                     var Rates = product.Reviews.Select(x => x.Rate);
@@ -44,6 +45,10 @@ namespace eMart.Controllers
 
 
             }
+            
+            
+            ViewBag.Brands = brands.Select(b => b.Name).Distinct().ToList();
+            ViewBag.Categories = categorysubCategories.Select(c => c.Name);
 
             ViewData["Id"] = id;
             const int pageSize = 10;

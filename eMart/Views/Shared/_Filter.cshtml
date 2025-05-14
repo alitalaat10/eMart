@@ -1,0 +1,81 @@
+﻿@using eMart.DTO_Models
+@model FilterData
+
+<div class="card mb-4 filter-sidebar">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Filters</h5>
+        <button class="btn btn-sm btn-outline-secondary d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse">
+            <i class="bi bi-funnel"></i>
+        </button>
+    </div>
+
+    <div class="collapse show" id="filterCollapse">
+        <div class="card-body">
+            <form method="post" asp-action="FilteredData" asp-controller="Filter">
+                <!-- In Stock -->
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input asp-for="InStock" type="checkbox" class="form-check-input" id="inStockCheck" />
+                        <label class="form-check-label" for="inStockCheck">In Stock</label>
+                    </div>
+                </div>
+
+                <!-- Price Range -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Price Range</label>
+                    <div class="input-group mb-2">
+                        <input asp-for="MinPrice" type="number" class="form-control" placeholder="Min" />
+                        <span class="input-group-text">-</span>
+                        <input asp-for="MaxPrice" type="number" class="form-control" placeholder="Max" />
+                    </div>
+                </div>
+
+                <!-- Rate Range -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Rate Range</label>
+                    <div class="input-group mb-2">
+                        <input asp-for="MinRate" type="number" step="0.1" class="form-control" placeholder="Min" />
+                        <span class="input-group-text">-</span>
+                        <input asp-for="MaxRate" type="number" step="0.1" class="form-control" placeholder="Max" />
+                    </div>
+                </div>
+
+                <!-- Brands -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Brands</label>
+                    <div class="filter-scroll" style="max-height: 150px; overflow-y: auto;">
+                        @foreach (var brand in ViewBag.Brands)
+                        {
+                            <div class="form-check">
+                                <input type="checkbox" name="SelectedBrands" value="@brand"
+                                       class="form-check-input" id="brand_@brand.Replace(" ", "_")" />
+                                <label class="form-check-label" for="brand_@brand.Replace(" ", "_")">@brand</label>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Categories -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Categories</label>
+                    <div class="filter-scroll" style="max-height: 150px; overflow-y: auto;">
+                        @foreach (var category in ViewBag.Categories)
+                        {
+                            <div class="form-check">
+                                <input type="checkbox" name="SelectedCategories" value="@category"
+                                       class="form-check-input" id="cat_@category.Replace(" ", "_")" />
+                                <label class="form-check-label" for="cat_@category.Replace(" ", "_")">@category</label>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                    <button type="button" class="btn btn-outline-secondary" id="clearFilter">Clear All</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

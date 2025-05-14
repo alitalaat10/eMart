@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<Product>
 @using Microsoft.AspNetCore.Mvc.Localization
+@using eMart.DTO_Models
 @inject IViewLocalizer localizer
 
 @{
@@ -11,61 +12,75 @@
         pager = ViewBag.Pager;
         pageNo = pager.CurrentPage;
     }
+    FilterData filterData = null;
 }
 <link href="~/css/cards.css" rel="stylesheet" />
 <link rel="stylesheet" href="~/css/stars.css" />
 <div class="container p-3">
     <partial name="_notify" />
-    <partial name="_SubcategoryPager" model="@pager" />
+
     <div class="row">
-        @foreach (var m in Model)
-        {
-            <div class="col-md-3 mb-3">
-                <!-- Use Bootstrap grid for consistent layout -->
-                <div class="card h-100">
-                    <!-- Set h-100 for full height -->
-                    <a asp-action="Index" asp-controller="Product" asp-route-id="@m.Id">
-                        
-                        <div class="card-img">
-                            <img src="@m.ImgSrc" alt="@m.Name" />
-                        </div>
-                    </a>
-                    <div class="card-footer text-center">
-                         <a asp-action="Index" asp-controller="Product" asp-route-id="@m.Id">
-                        <div>
-                            @m.Name
-                        </div>
-                        </a>
-                        <div class="star-rating">
-                            @for (int i = 1; i <= 5; i++)
-                            {
-                                if (i <= m.Rate)
+        <!-- Filter Sidebar -->
+        <div class="col-md-3">
+            <partial name="_Filter" model="filterData" />
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <partial name="_SubcategoryPager" model="@pager" />
+
+            <div class="row">
+                @foreach (var m in Model)
+                {
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <a asp-action="Index" asp-controller="Product" asp-route-id="@m.Id">
+                                <div class="card-img">
+                                    <img src="@m.ImgSrc" alt="@m.Name" class="img-fluid" />
+                                </div>
+                            </a>
+                            <div class="card-footer text-center">
+                                <a asp-action="Index" asp-controller="Product" asp-route-id="@m.Id">
+                                    <div>@m.Name</div>
+                                </a>
+                                <div class="star-rating">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= m.Rate)
+                                        {
+                                            <span class="star filled">★</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="star">★</span>
+                                        }
+                                    }
+                                </div>
+                                <div><strong>@m.price.ToString("C")</strong></div>
+                                @if (m.Stock == 0)
                                 {
-                                    <span class="star filled">★</span>
+                                    <div class="btn btn-warning disabled">@localizer["Out of Stock"]</div>
                                 }
                                 else
                                 {
-                                    <span class="star">★</span>
+                                    <a asp-action="AddToCart" asp-controller="Cart" asp-route-subcatpg="@pageNo" asp-route-id="@m.Id" asp-route-returnUrl="@string.Format("{0}", Context.Request.Path)" class="btn btn-success">
+                                        <i class="bi bi-plus-square"></i> @localizer["Add to Cart"]
+                                    </a>
                                 }
-                            }
+                            </div>
                         </div>
-                        <div>
-                            <strong>@m.price.ToString("C")</strong>
-                        </div>
-                        @if (m.Stock == 0)
-                        {
-                            <div class="btn btn-warning disabled">@localizer["Out of Stock"]</div>
-                        }
-                        else
-                        {
-                            <a asp-action="AddToCart" asp-controller="Cart" asp-route-subcatid="@pageNo" asp-route-id="@m.Id" asp-route-returnUrl="@string.Format("{0}{1}", Context.Request.Path, Context.Request.QueryString)" class="btn btn-success">
-                                <i class="bi bi-plus-square"></i> @localizer["Add to Cart"]
-                            </a>
-                        }
                     </div>
-                </div>
+                }
+
+                @if (!Model.Any())
+                {
+                    <div class="col-12 text-center">
+                        <p>@localizer["No products available."]</p>
+                    </div>
+                }
             </div>
-        }
+
+            <partial name="_SubcategoryPager" model="@pager" />
+        </div>
     </div>
-    <partial name="_SubcategoryPager" model="@pager" />
 </div>

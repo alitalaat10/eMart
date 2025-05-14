@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using Newtonsoft.Json;
 using System;
 using System.Security.Claims;
 
@@ -145,6 +146,7 @@ namespace eMart.Controllers
                 {
                     TempData["maxQuantity"] = $"the seller has {product.Stock} pieces of this product";
                 }
+               
                 if (searchTerm != null)
                 {
                     return RedirectToAction("Result", "Search", new { searchTerm ,pg=searchpg });
@@ -157,7 +159,7 @@ namespace eMart.Controllers
                 {
                     string[] segments = returnUrl.Split('/', StringSplitOptions.RemoveEmptyEntries);
                     string catid = segments.Last(); 
-                    return RedirectToAction("Index", "Category", new { id=catid,pg = catpg });
+                    return RedirectToAction("Index", "Category", new { id=catid, pg = catpg });
                 }
                 if (subcatpg != null)
                 {
@@ -165,16 +167,29 @@ namespace eMart.Controllers
                     string[] segments = returnUrl.Split('/', StringSplitOptions.RemoveEmptyEntries);
                     string subid = segments.Last(); 
 
-                    return RedirectToAction("Index", "SubCategory", new {id=subid, pg = subcatpg });
+                    return RedirectToAction("Index", "SubCategory", new { id=subid, pg = subcatpg });
                 }
-               
+                string[] urlsegments = returnUrl.Split('/', StringSplitOptions.RemoveEmptyEntries);
+                string lastSegment = urlsegments.Last();
+                if (lastSegment == "Cart") {
+                    return RedirectToAction("Index", "Cart");
+                }
+                string FSeg = urlsegments[0];
+                if (FSeg == "Product") {
+                    return RedirectToAction("Index", "Product", new { id=lastSegment});
+                }
+                if (HttpContext.Session.GetString("CurrentFilter") != null)
+                {
+                     
+                    return RedirectToAction("FilteredData", "Filter");
+                }
 
                 return LocalRedirect(returnUrl); 
 
             }
             else
             {
-          
+                 
                 TempData["searchTerm"] = searchTerm;
                 TempData["Id"] = id;
                 return RedirectToPage("/Account/Login", new { area = "Identity" , returnUrl});

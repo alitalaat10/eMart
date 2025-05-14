@@ -3,6 +3,7 @@ using eMart.Repository.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using SendGrid.Helpers.Mail;
 
 namespace eMart.Controllers
 {
@@ -28,11 +29,12 @@ namespace eMart.Controllers
             ViewBag.isAdmin = HttpContext.Session.GetString("isAdmin");
             ViewData["Count"] = HttpContext.Session.GetInt32("count");
             ViewData["Title"] = subcategory.Name;
-            var products = _unitOfWork.products.FindAll(nameof(Product.Reviews));
+            var products = _unitOfWork.products.FindAll(nameof(Product.Reviews),nameof(Product.brand));
             var subproducts = products.Where(x => x.SubCategoryId == id);
-
+            List<Brand> brands = new List<Brand>();
             foreach (var product in subproducts)
             {
+                brands.Add(product.brand);
                 if (!product.Reviews.IsNullOrEmpty())
                 {
                     var Rates = product.Reviews.Select(x => x.Rate);
@@ -41,6 +43,10 @@ namespace eMart.Controllers
 
 
             }
+            List<string> subCategories = new List<string>();
+            subCategories.Add(subcategory.Name);
+            ViewBag.Brands = brands.Select(b => b.Name).Distinct().ToList();
+            ViewBag.Categories = subCategories;
 
             ViewData["Id"] = id;
             const int pageSize = 10;
